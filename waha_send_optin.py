@@ -49,22 +49,35 @@ def normalize_phone(value):
     return raw
 
 
-def message(name):
-    name = re.sub(r'[\r\n\t]', ' ', str(name or '')).strip()[:80]
-    greeting = f'Halo Admin {name}, selamat siang! 👋' if name else 'Halo Kak, selamat siang! 👋'
-    return (
-        f'{greeting}\n\n'
-        'Perkenalkan, kami dari *Sewantara*, platform manajemen rental PS yang sedang '
-        'dikembangkan untuk bisnis di Jember.\n\n'
-        'Kami sedang mengundang mitra yang bersedia mencoba sistem *GRATIS selama 1 bulan*, '
-        'tanpa kewajiban berlangganan. Sewantara menyiapkan fitur booking online, '
-        'pengelolaan unit dan transaksi, serta laporan rental. '\
-        'Ke depannya, kami juga merencanakan marketplace rental di Jember.\n\n'
-        'Apakah Kakak tertarik menjadi mitra tester dan memberi masukan untuk pengembangan kami? '
-        'Jika berkenan, kami bisa kirimkan detailnya. 😊\n\n'
-        'Jika tidak ingin menerima informasi lanjutan, cukup balas STOP dan kami tidak akan menghubungi lagi.\n\n'
-        'Sewantara — https://sewantara.id'
-    )
+def message():
+    return """Halo, selamat siang Kak! 👋
+
+Perkenalkan, saya dari *Sewantara*, platform digital yang sedang kami kembangkan untuk membantu pemilik usaha rental PlayStation mengelola bisnis dengan lebih mudah dan modern.
+
+Saat ini, kami sedang mencari beberapa *mitra rental PS di wilayah Jember* yang bersedia menjadi _early tester_ sistem kami secara *GRATIS selama 1 bulan*, tanpa kewajiban berlangganan setelah masa uji coba.
+
+🎮 *Apa saja keuntungan yang bisa Kakak dapatkan?*
+
+✅ *Booking Online 24 Jam* — Pelanggan nantinya bisa melihat ketersediaan dan melakukan booking PS secara online tanpa harus datang langsung.
+
+✅ *Manajemen Rental* — Membantu mencatat penyewaan, durasi bermain, dan transaksi pelanggan.
+
+✅ *Pengelolaan Unit PS* — Memantau unit yang tersedia, sedang digunakan, maupun sudah dibooking.
+
+✅ *Laporan Bisnis* — Melihat pemasukan dan aktivitas rental melalui dashboard.
+
+✅ *Peluang Masuk Marketplace Sewantara* — Ke depannya, rental Kakak berkesempatan tampil di marketplace rental PlayStation wilayah Jember agar lebih mudah ditemukan calon pelanggan.
+
+Karena platform ini masih dalam tahap pengembangan, kami juga ingin mendengar masukan langsung dari pemilik rental agar fitur yang kami bangun benar-benar sesuai kebutuhan di lapangan.
+
+*Apakah Kakak berkenan menjadi salah satu mitra tester awal Sewantara secara gratis?* 😊
+
+Jika berkenan, kami dengan senang hati akan menjelaskan sistemnya lebih lanjut.
+
+Terima kasih atas waktunya, Kak! 🙏
+
+*Tim Sewantara*
+🌐 https://sewantara.id"""
 
 
 def request_json(base_url, api_key, path, method='GET', payload=None):
@@ -190,7 +203,7 @@ def main():
         phone = normalize_phone(args.test_number)
         if not phone:
             parser.error('Nomor tes tidak valid; gunakan format 08... atau 628...')
-        text = message('Sewantara (tes internal)')
+        text = message()
         if not args.send:
             print(f'[DRY-RUN TES] {phone}@c.us\n\n{text}')
             return 0
@@ -238,14 +251,14 @@ def main():
         print('DRY-RUN. Daftar calon penerima yang lolos verifikasi izin:')
         for phone, name in batch:
             print(f'  {phone}: {name}')
-        print('\nContoh isi pesan:\n' + message(batch[0][1]))
+        print('\nContoh isi pesan:\n' + message())
         print('\nJalankan --send hanya setelah izin penerima benar-benar tercatat di CSV.')
         return 0
 
     n = 0
     for idx, (phone, name) in enumerate(batch, 1):
         try:
-            status, payload = do_send(base_url, api_key, session, phone, message(name))
+            status, payload = do_send(base_url, api_key, session, phone, message())
             if status not in (200, 201, 202):
                 raise RuntimeError(f'HTTP {status}: {str(payload)[:250]}')
             save_result(args.results, name, phone, 'API_DITERIMA', str(payload)[:250])
