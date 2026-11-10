@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Sewantara: WAHA opt-in WhatsApp outreach from CSV, standard-library only.
+"""Sewantara: WAHA WhatsApp outreach from CSV, standard-library only.
 
-Default: dry-run. Only opted-in contacts with a recorded permission source/date
-are eligible for bulk sending. Nothing is sent unless --send is provided.
+Default: dry-run. Bulk sending skips opted-out contacts and numbers already
+accepted by WAHA. Nothing is sent unless --send is provided.
 """
 import argparse
 import csv
@@ -144,20 +144,9 @@ def save_result(path, name, phone, result, detail):
         })
 
 
-def is_allowed(row):
-    consent = str(row.get('Izin Kirim WhatsApp', '')).strip().casefold()
-    source = str(row.get('Sumber Izin', '')).strip()
-    date = str(row.get('Tanggal Izin (YYYY-MM-DD)', '')).strip()
-    if consent not in {'ya', 'yes'} or not source or not date:
-        return False
-    try:
-        dt.date.fromisoformat(date)
-    except ValueError:
-        return False
+def has_opted_out(row):
     current_status = str(row.get('Status Follow-up', '')).strip().casefold()
-    if any(flag in current_status for flag in ('jangan hubungi', 'stop', 'menolak', 'tolak', 'opt-out', 'unsubscribe')):
-        return False
-    return True
+    return any(flag in current_status for flag in ('jangan hubungi', 'stop', 'menolak', 'tolak', 'opt-out', 'unsubscribe'))
 
 
 def do_send(base_url, api_key, session, phone, text):
@@ -170,7 +159,7 @@ def do_send(base_url, api_key, session, phone, text):
 
 def main():
     read_env_file(ROOT / '.env.waha')
-    parser = argparse.ArgumentParser(description='Sewantara WAHA opt-in outreach; default dry-run')
+    parser = argparse.ArgumentParser(description='Sewantara WAHA CSV outreach; default dry-run')
     parser.add_argument('--csv', type=Path, default=DEFAULT_CSV)
     parser.add_argument('--results', type=Path, default=DEFAULT_LOG)
     parser.add_argument('--check', action='store_true', help='Periksa status session saja')
@@ -231,7 +220,7 @@ def main():
     seen = set()
     invalid = 0
     for row in rows:
-        if not is_allowed(row):
+        if has_opted_out(row):
             continue
         phone = normalize_phone(row.get('Nomor Publik (teks)', ''))
         if phone is None:
@@ -241,18 +230,18 @@ def main():
             continue
         seen.add(phone)
         queued.append((phone, row.get('Nama Bisnis', '').strip()))
-    print(f'Total kontak CSV: {len(rows)} | Memiliki izin tercatat dan belum dikirim: {len(queued)} | Nomor invalid: {invalid}')
+    print(f'Total kontak CSV: {len(rows)} | Siap dikirim: {len(queued)} | Nomor invalid: {invalid}')
     if not queued:
-        print('Tidak ada kontak dengan izin tercatat. Tidak ada pesan yang dikirim.')
+        print('Tidak ada kontak yang siap dikirim.')
         return 0
 
     batch = queued[:args.max]
     if not args.send:
-        print('DRY-RUN. Daftar calon penerima yang lolos verifikasi izin:')
+        print('DRY-RUN. Daftar calon penerima:')
         for phone, name in batch:
             print(f'  {phone}: {name}')
         print('\nContoh isi pesan:\n' + message())
-        print('\nJalankan --send hanya setelah izin penerima benar-benar tercatat di CSV.')
+        print('\nTambahkan --send untuk mengirim pesan ke batch ini.')
         return 0
 
     n = 0
