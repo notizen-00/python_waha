@@ -17,7 +17,7 @@ from urllib.parse import quote
 from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parent
-DEFAULT_CSV = ROOT / 'prospek_rental_ps_jember_optin.csv'
+DEFAULT_CSV = ROOT / 'kontak-kos-jember.csv'
 DEFAULT_LOG = ROOT / 'hasil_kirim_waha.csv'
 LOG_FIELDS = ['waktu', 'nama_bisnis', 'nomor_62', 'hasil', 'detail']
 
