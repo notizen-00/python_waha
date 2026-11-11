@@ -2,7 +2,7 @@ SEWANTARA | Pengiriman WhatsApp dari CSV melalui WAHA
 
 File:
 - waha_send_optin.py           -> script pengiriman WAHA
-- kontak-kos-jember.csv       -> daftar kontak kos Jember yang dipakai secara default
+- kontak-rental-mobil-indonesia.csv -> daftar kontak dan kampanye rental mobil yang dipakai secara default
 - .env.waha.example           -> salin ke .env.waha dan isi URL, SESSION, API KEY
 
 Prasyarat:
@@ -20,7 +20,7 @@ Cara menjalankan di VPS:
 5. python3 waha_send_optin.py --send --test-number 08XXXXXXXXXX
    (mengirim 1 tes ke nomor Anda sendiri)
 6. Periksa daftar kontak di CSV. Tandai penolakan dengan Status Follow-up = Jangan hubungi.
-7. python3 waha_send_optin.py             # preview kontak kos dan pesan, tanpa kirim
+7. python3 waha_send_optin.py             # preview kontak rental mobil dan pesan, tanpa kirim
 8. python3 waha_send_optin.py --send --max 5
 
 Catatan:

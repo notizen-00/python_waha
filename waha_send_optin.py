@@ -17,7 +17,7 @@ from urllib.parse import quote
 from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parent
-DEFAULT_CSV = ROOT / 'kontak-kos-jember.csv'
+DEFAULT_CSV = ROOT / 'kontak-rental-mobil-indonesia.csv'
 DEFAULT_LOG = ROOT / 'hasil_kirim_waha.csv'
 LOG_FIELDS = ['waktu', 'nama_bisnis', 'nomor_62', 'hasil', 'detail']
 
@@ -49,13 +49,16 @@ def normalize_phone(value):
 
 
 def message():
-    return """Halo, Kak! Saya dari Sewantara. Kami sedang mengajak pengelola kos di Jember untuk ikut uji coba sistem pengelolaan kos harian dan bulanan.
+    return """Halo, Kak! Saya dari *Sewantara*. Kalau booking rental masuk dari beberapa chat WhatsApp, pernah nggak Kakak harus cek ulang apakah mobilnya masih kosong atau DP-nya sudah masuk?
 
-Lewat Sewantara, Kakak bisa cek kamar kosong, pantau booking, dan lihat transaksi pembayaran langsung dari HP lewat website. Kos Kakak juga bisa punya halaman sendiri untuk menampilkan foto kamar, fasilitas, dan tarif. Link halamannya bisa Kakak bagikan ke calon penyewa lewat WhatsApp.
+Dengan Sewantara, jadwal sewa dan ketersediaan armada bisa dipantau dari satu dashboard di HP. *Unit yang sudah dibooking ditandai tidak tersedia di jadwal tersebut*, jadi risiko satu mobil dipesan dua pelanggan di tanggal yang sama bisa berkurang.
 
-Ke depannya, kos Kakak juga bisa bergabung di Marketplace Sewantara wilayah Jember supaya lebih mudah ditemukan calon penyewa.
+Rental Kakak juga bisa punya *halaman booking sendiri*. Calon pelanggan bisa lihat foto mobil, tarif, dan jadwal yang tersedia sebelum memesan. Kalau pembayaran online diaktifkan, pelanggan bisa *bayar DP langsung lewat website* dan Kakak bisa cek statusnya di dashboard tanpa perlu minta bukti transfer lewat chat.
 
-Uji cobanya gratis 1 bulan, tanpa kewajiban berlangganan. Kalau tertarik, boleh saya kirim demo singkatnya, Kak?"""
+Kami lagi membuka *uji coba gratis 1 bulan* tanpa kewajiban berlangganan. Kalau Kakak tertarik, boleh saya kirim demo singkat alurnya, mulai dari pelanggan pilih mobil sampai bayar DP? 😊
+
+*Tim Sewantara*
+https://sewantara.id"""
 
 
 def request_json(base_url, api_key, path, method='GET', payload=None):
