@@ -49,34 +49,13 @@ def normalize_phone(value):
 
 
 def message():
-    return """Halo, selamat siang Kak! 👋
+    return """Halo, Kak! Saya dari Sewantara. Kami sedang mengajak pengelola kos di Jember untuk ikut uji coba sistem pengelolaan kos harian dan bulanan.
 
-Perkenalkan, saya dari *Sewantara*, platform digital yang sedang kami kembangkan untuk membantu pemilik usaha rental PlayStation mengelola bisnis dengan lebih mudah dan modern.
+Lewat Sewantara, Kakak bisa cek kamar kosong, pantau booking, dan lihat transaksi pembayaran langsung dari HP lewat website. Kos Kakak juga bisa punya halaman sendiri untuk menampilkan foto kamar, fasilitas, dan tarif. Link halamannya bisa Kakak bagikan ke calon penyewa lewat WhatsApp.
 
-Saat ini, kami sedang mencari beberapa *mitra rental PS di wilayah Jember* yang bersedia menjadi _early tester_ sistem kami secara *GRATIS selama 1 bulan*, tanpa kewajiban berlangganan setelah masa uji coba.
+Ke depannya, kos Kakak juga bisa bergabung di Marketplace Sewantara wilayah Jember supaya lebih mudah ditemukan calon penyewa.
 
-🎮 *Apa saja keuntungan yang bisa Kakak dapatkan?*
-
-✅ *Booking Online 24 Jam* — Pelanggan nantinya bisa melihat ketersediaan dan melakukan booking PS secara online tanpa harus datang langsung.
-
-✅ *Manajemen Rental* — Membantu mencatat penyewaan, durasi bermain, dan transaksi pelanggan.
-
-✅ *Pengelolaan Unit PS* — Memantau unit yang tersedia, sedang digunakan, maupun sudah dibooking.
-
-✅ *Laporan Bisnis* — Melihat pemasukan dan aktivitas rental melalui dashboard.
-
-✅ *Peluang Masuk Marketplace Sewantara* — Ke depannya, rental Kakak berkesempatan tampil di marketplace rental PlayStation wilayah Jember agar lebih mudah ditemukan calon pelanggan.
-
-Karena platform ini masih dalam tahap pengembangan, kami juga ingin mendengar masukan langsung dari pemilik rental agar fitur yang kami bangun benar-benar sesuai kebutuhan di lapangan.
-
-*Apakah Kakak berkenan menjadi salah satu mitra tester awal Sewantara secara gratis?* 😊
-
-Jika berkenan, kami dengan senang hati akan menjelaskan sistemnya lebih lanjut.
-
-Terima kasih atas waktunya, Kak! 🙏
-
-*Tim Sewantara*
-🌐 https://sewantara.id"""
+Uji cobanya gratis 1 bulan, tanpa kewajiban berlangganan. Kalau tertarik, boleh saya kirim demo singkatnya, Kak?"""
 
 
 def request_json(base_url, api_key, path, method='GET', payload=None):
