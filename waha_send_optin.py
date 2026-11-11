@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """Sewantara: WAHA WhatsApp outreach from CSV, standard-library only.
 
-Default: dry-run. Bulk sending skips opted-out contacts and numbers already
-accepted by WAHA. Nothing is sent unless --send is provided.
+Default: dry-run. Bulk sending skips opted-out contacts and numbers with a logged bulk send attempt. Nothing is sent unless --send is provided.
 """
 import argparse
 import csv
@@ -120,12 +119,15 @@ def read_contacts(path):
         return list(csv.DictReader(f))
 
 
-def read_sent(path):
+def read_attempted(path):
     if not path.exists():
         return set()
     with path.open('r', newline='', encoding='utf-8-sig') as f:
         rows = csv.DictReader(f)
-        return {r.get('nomor_62', '') for r in rows if r.get('hasil') == 'API_DITERIMA'}
+        return {
+            row['nomor_62'] for row in rows
+            if row.get('nomor_62') and row.get('hasil') in {'API_DITERIMA', 'ERROR_PERIKSA_MANUAL'}
+        }
 
 
 def save_result(path, name, phone, result, detail):
@@ -215,7 +217,7 @@ def main():
         print(f'ERROR: {ex}', file=sys.stderr)
         return 1
 
-    sent = read_sent(args.results)
+    attempted = read_attempted(args.results)
     queued = []
     seen = set()
     invalid = 0
@@ -226,7 +228,7 @@ def main():
         if phone is None:
             invalid += 1
             continue
-        if phone in seen or phone in sent:
+        if phone in seen or phone in attempted:
             continue
         seen.add(phone)
         queued.append((phone, row.get('Nama Bisnis', '').strip()))
@@ -256,7 +258,7 @@ def main():
         except RuntimeError as ex:
             save_result(args.results, name, phone, 'ERROR_PERIKSA_MANUAL', str(ex))
             print(f'[{idx}/{len(batch)}] ERROR: {name} ({phone}) - {ex}', file=sys.stderr)
-            print('Peringatan: cek chat/log WAHA sebelum mengulang nomor yang gagal atau timeout.')
+            print('Nomor ini dilewati pada batch berikutnya. Periksa chat dan log WAHA.')
         if idx < len(batch):
             time.sleep(args.delay)
     print(f'API menerima {n}/{len(batch)} permintaan. BUKAN bukti pesan telah diterima/dibaca.')

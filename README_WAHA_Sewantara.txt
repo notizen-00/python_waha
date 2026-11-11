@@ -24,8 +24,8 @@ Cara menjalankan di VPS:
 8. python3 waha_send_optin.py --send --max 5
 
 Catatan:
-- Setiap eksekusi --send mengirim paling banyak 5 pesan (default), ke nomor valid yang belum tercatat sebagai API_DITERIMA dan tidak berstatus menolak.
-- Log hasil_kirim_waha.csv mencegah pengiriman ulang untuk respons API sukses.
+- Setiap eksekusi --send mencoba paling banyak 5 pengiriman (default) ke kontak yang memenuhi syarat.
+- Batch berikutnya melewati nomor yang tercatat sebagai API_DITERIMA atau ERROR_PERIKSA_MANUAL di hasil_kirim_waha.csv.
 - API_DITERIMA artinya WAHA menerima request, belum menjamin WhatsApp terkirim/terbaca.
 - Kegagalan/timeout bisa ambigu, cek chat manual sebelum ulang.
 - Skrip tidak memeriksa kolom Izin Kirim WhatsApp, Sumber Izin, dan Tanggal Izin.
